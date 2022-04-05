@@ -8,8 +8,6 @@ Then, open [http://localhost:3000](http://localhost:3000) with any browser to ac
 Or, [https://code-dazur.vercel.app/](https://code-dazur.vercel.app/) visit this website.
 ## With More Time
 
-To learn more about Next.js, take a look at the following resources:
-
 - I would have add more images to improve UI
 - I would have added more filter options
 - I would need to work a bit more on responsiveness, but I think it still looks decent.
