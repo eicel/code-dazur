@@ -48,6 +48,10 @@ const TimeTravel = () => {
 	const contextObj: ContextType = useContext(AppContext);;
 
 	const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (event.target.value === '') {
+			setInputValue('');
+			return;
+		}
 		const value = parseInt(event.target.value, 10);
 		if (value && typeof value === 'number' && !isNaN(value)) {
 			setInputValue(value.toString());
@@ -57,6 +61,9 @@ const TimeTravel = () => {
 	};
 
 	const applyDays = () => {
+		if (inputValue === '') {
+			return;
+		}
 		const days = parseInt(inputValue);
 		let newData = [...contextObj.data];
 		for (let i = 0; i < days; i++) {
@@ -67,7 +74,7 @@ const TimeTravel = () => {
 	};
 
 	const resetDays = () => {
-		contextObj.setData(DATA)
+		contextObj.setData(DATA.map(eachData => ({...eachData})));
 		toggle();
 	};
 

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Chevron, TextImage } from './CommonStyles';
 import { transitionStringTemplate } from '../constants/style';
-import { ContextType } from '../constants/types';
+import { ContextType, ItemType } from '../constants/types';
 import { AppContext } from '../pages/_app';
 
 const SliderOuterContainer = styled.div`
@@ -42,17 +42,31 @@ const Slider = () => {
 	const [variantObj, setVariantObj] = useState<Variants>({});
 	const contextObj: ContextType = useContext(AppContext);
 
+	const [closestSellInData, setData] = useState<Array<ItemType>>([]);
+
 	const swipe = (leftOrRight: SwipeType) => {
 		if (leftOrRight === 'left') {
-			setSliderIndex(prevIndex => (prevIndex + 1 + contextObj.data.length) % contextObj.data.length);
+			setSliderIndex(prevIndex => (prevIndex - 1 + closestSellInData.length) % closestSellInData.length);
 		} else {
-			setSliderIndex(prevIndex => (prevIndex - 1 + contextObj.data.length) % contextObj.data.length);
+			setSliderIndex(prevIndex => (prevIndex + 1 + closestSellInData.length) % closestSellInData.length);
 		}
 	}
 
 	useEffect(() => {
+		const data = contextObj.data.map(eachData => ({...eachData}));
+		data.sort((a, b) => {
+			if (a.sellIn < b.sellIn) {
+				return -1;
+			} else if (a.sellIn > b.sellIn) {
+				return 1;
+			}
+			return 0;
+		});
+		const newData = data.splice(0, 3);
+		setData(newData);
+
 		const newVariantObj: Variants = {};
-		contextObj.data.forEach((eachData, index) => {
+		newData.forEach((eachData, index) => {
 			newVariantObj['animation_' + index] = {
 				x: `${(index * -100)}%`
 			}
@@ -75,10 +89,10 @@ const Slider = () => {
 				variants={variantObj}
 				style={{
 					display: 'grid',
-					gridTemplateColumns: `repeat(${contextObj.data.length}, 100%)`,
+					gridTemplateColumns: `repeat(${closestSellInData.length}, 100%)`,
 				}}
 			>
-				{contextObj.data.map((eachData) => (
+				{closestSellInData.map((eachData) => (
 					<SliderItem key={eachData.id}>
 						<TextImage>
 							<div>
@@ -88,7 +102,7 @@ const Slider = () => {
 					</SliderItem>
 				))}
 			</motion.div>
-			{contextObj.data.length > 0 && (
+			{closestSellInData.length > 0 && (
 				<EmptyButton right='0'
 					onClick={() => swipe('right')}
 				>

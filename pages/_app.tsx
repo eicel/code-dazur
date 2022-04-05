@@ -9,7 +9,7 @@ export const AppContext = createContext<ContextType>({
 	category: 'all',
 	changeTheme: () => {},
 	changeCategory: () => {},
-	data: DATA,
+	data: [],
 	setData: () => {}
 });
 
@@ -24,6 +24,7 @@ function App({ Component, pageProps }: AppProps) {
 			}
 		});
 	};
+	
 
 	const changeCategory = (category: FilterOptions) => {
 		setState({
@@ -54,7 +55,7 @@ function App({ Component, pageProps }: AppProps) {
 		changeTheme,
 		changeCategory,
 		category: 'all',
-		data: DATA,
+		data: DATA.map(eachData => ({...eachData})),
 		setData: changeData
 	});
 
