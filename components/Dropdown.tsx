@@ -22,11 +22,19 @@ const Title = styled.div<{bgColor: string}>`
 	`}
 `;
 
-const DropdownItem = styled.div`
+const SelectedDropdownItem = styled.div`
 	${LAYOUT_TEMPLATE.border}
 	${LAYOUT_TEMPLATE.boxShadow}
 	font-size: 0.7em;
 	padding: 10px 20px;
+`;
+const DropdownItem = styled.div`
+	border-bottom: 1px solid #DDD;
+	font-size: 0.7em;
+	padding: 10px 20px;
+	&:last-item: {
+		border: 0;
+	}
 `;
 
 export type DropdownDataType = {
@@ -91,9 +99,9 @@ const Dropdown: React.FC<DropdownPropType> = (props) => {
 			<Title bgColor={chosenTheme.background}>
 				{title}
 			</Title>
-			<DropdownItem onClick={toggle}>
+			<SelectedDropdownItem onClick={toggle}>
 				{selectedObj ? selectedObj.value : ''}
-			</DropdownItem>
+			</SelectedDropdownItem>
 			<motion.div initial={false}
 				animate={isOpen ? 'open' : 'close'}
 				transition={{ ease: "easeOut", duration: 0.15 }}	
@@ -102,7 +110,9 @@ const Dropdown: React.FC<DropdownPropType> = (props) => {
 					display: 'flex',
 					flexDirection: 'column',
 					justifyContent: 'center',
-					transformOrigin: 'top center'
+					transformOrigin: 'top center',
+					border: '1px solid #DDD',
+					borderRadius: '3px',
 				}
 			}>
 				{data.map((eachData) => (
